@@ -2,22 +2,24 @@
 namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-class LoremIpsumController extends Controller {
-
-
+class LoremIpController extends Controller {
+//get postParagraphs
     public function getParagraphs(Request $request) {
 $numParagraphs = $request->input('paragraphs');
         $generator = new \Badcow\LoremIpsum\Generator();
         $paragraphs = $generator->getParagraphs($numParagraphs);
-        return view('LoremIpsum\LoremIpsum')->with('$paragraphs');
+        return view('loremText')->with('paragraphs', $paragraphs);
     }
-
     public function postParagraphs(Request $request){
+
+      $this->validate($request, [
+       'paragraphs' => 'required|numeric|min:1|max:88|',
+   ]);
         $numParagraphs = $request->input('paragraphs');
         $generator = new \Badcow\LoremIpsum\Generator();
         $paragraphs = $generator->getParagraphs($numParagraphs);
-        echo implode('<p>', $paragraphs);
-        return view('LoremIpsum\LoremIpsum')->with('$paragraphs');
+
+        return view('loremText')->with('paragraphs', $paragraphs);
     }
 }
 ?>
